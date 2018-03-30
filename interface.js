@@ -14,7 +14,7 @@
 
 // Initialize algorithm.js: we use a 2x2x2x2-sized sudoku game.
 // This sets up the constants Sudoku.N = 4, Sudoku.S = 16, Sudoku.B = 2.
-var boardSize =3;
+var boardSize =2;
 
 Sudoku.init(boardSize);
 //var usefulHintCount=0;
