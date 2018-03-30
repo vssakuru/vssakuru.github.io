@@ -304,7 +304,7 @@ function redraw(givenstate, pos) {
     }
     // Hide the timer for puzzle #1.
     $('.timescore').css({
-        visibility: state.seed == 1 && !victory
+        visibility: state.seed === 0 && !victory
             ? 'hidden' : 'visible'
     });
     // If the timer should be running but it is not, get it going.
