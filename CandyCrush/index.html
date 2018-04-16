@@ -1,0 +1,721 @@
+    <!--
+    CandyCrush
+    Your Name: Venkata Devi Niharika Sakuru
+    Collaborators: stack-overflow, w3schools, random Google search.
+    -->
+    <!DOCTYPE html>
+    <html>
+    <!--
+    /* Copyright (c) 2017 MIT 6.813/6.831 course staff, all rights reserved.
+     * Redistribution of original or derived work requires permission of course staff.
+     */
+    -->
+
+    <head>
+    <meta charset="utf-8">
+    <title>CandyCrush</title>
+
+    <!-- Load style sheets -->
+    <link rel="stylesheet" href=
+      "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="mainLayout.css">
+
+    <!-- Use mobile-aware viewport -->
+    <meta name="viewport" content=
+      "width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Load any supplemental Javascript libraries here -->
+    <script src=
+      "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src=
+      "https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.2/seedrandom.js">
+    </script>
+    <script src="candy.js"></script>
+    <script src="board.js"></script>
+    <script src="rules.js"></script>
+
+    <script>
+    // Create table with colors
+    // function showTable() {
+    //     var table = document.getElementById("myTable");
+    //     $("#myTable").empty();
+    //     var i,j;
+    //     for(i = 0; i < 8; i++){
+    //         var row = table.insertRow(i);
+    //         for(j=0; j < 8; j++){
+    //             var cell = row.insertCell(j);
+    //             if(board.getCandyAt(i, j) == null){
+    //                 cell.style.backgroundColor = 'white';
+    //                 cell.innerHTML = board.getColumnName(i).concat(j + 1);
+    //             }
+    //             else {
+    //                 if (board.getCandyAt(i, j).color === 'yellow') {
+    //                     cell.style.color = 'black';
+    //                     cell.innerHTML = board.getColumnName(i).concat(j + 1);
+    //                 }
+    //                 else {
+    //                     cell.innerHTML = board.getColumnName(i).concat(j + 1);
+    //                 }
+    //                 cell.style.backgroundColor = board.getCandyAt(i, j).color;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // Create a canvas table
+
+    // function showTable() {
+    //     var canvas = document.getElementById("canvas");
+    //     var context = canvas.getContext('2d');
+    //     context.beginPath();
+    //     for(var x=0; x <= board.boardSize; x++){
+    //         context.moveTo(x * cellWidth, 0);
+    //         context.lineTo(x*cellWidth, 320);
+    //     }
+    //
+    //     for(var y=0; y <= board.boardSize; y++){
+    //         context.moveTo(0, y*cellWidth);
+    //         context.lineTo(320, y*cellWidth);
+    //     }
+    //     context.lineWidth= 0.5;
+    //     context.strokeStyle = 'black';
+    //     context.stroke();
+    //
+    // }
+
+    //Disable all the buttons and make a default state
+    function defaultButtons() {
+        // $('.buttons').prop('disabled', true);
+         document.getElementById("newGame").disabled = false;
+         document.getElementById("showMove").disabled = false;
+        // document.getElementById("moveToCell").value = "";
+        // if (rules.getCandyCrushes().length != 0) {
+        //     document.getElementById("crushCandy").disabled = false;
+        //     document.getElementById("moveToCell").disabled = true;
+        // } else {
+        //     document.getElementById("moveToCell").disabled = false;
+        // }
+    }
+
+    //function to move the elements upon button click
+    // function moveCandies(directionMoved) {
+    //     var nextMove = document.getElementById("moveToCell").value;
+    //     var x = board.getColumnNumber(nextMove.substr(0,1));
+    //     var y = Number(nextMove.substr(1,nextMove.length - 1));
+    //     y--;
+    //     var finalX;
+    //     var finalY;
+    //     switch (directionMoved){
+    //         case "up":{
+    //             //  board.flipCandies(board.getCandyAt(row, col), board.getCandyAt(row-1, col));
+    //             finalX =x;
+    //             finalY = y-1;
+    //             break;
+    //         }
+    //         case "down":{
+    //             // board.flipCandies(board.getCandyAt(row, col), board.getCandyAt(row+1, col));
+    //             finalX =x;
+    //             finalY = y+1;
+    //             break;
+    //         }
+    //         case "left":{
+    //             // board.flipCandies(board.getCandyAt(row, col), board.getCandyAt(row, col-1));
+    //             finalX =x-1;
+    //             finalY = y;
+    //             break;
+    //         }
+    //         case "right":{
+    //             // board.flipCandies(board.getCandyAt(row, col), board.getCandyAt(row, col+1));
+    //             finalX =x+1;
+    //             finalY = y;
+    //             break;
+    //         }
+    //         //showTable();
+    //     }
+    //     board.flipCandies(board.getCandyAt(y, x), board.getCandyAt(finalY, finalX));
+    //     document.getElementById("moveToCell").value = "";
+    //     defaultButtons();
+    // }
+
+    // By default, the first board loaded by your page will be the same
+    // each time you load (which is accomplished by "seeding" the random
+    // number generator. This makes testing (and grading!) easier!
+    Math.seedrandom(0);
+
+
+    // A short jQuery extension to read query parameters from the URL.
+    $.extend({
+      getUrlVars: function() {
+        var vars = [], pair;
+        var pairs = window.location.search.substr(1).split('&');
+        for (var i = 0; i < pairs.length; i++) {
+          pair = pairs[i].split('=');
+          vars.push(pair[0]);
+          vars[pair[0]] = pair[1] &&
+              decodeURIComponent(pair[1].replace(/\+/g, ' '));
+        }
+        return vars;
+      },
+      getUrlVar: function(name) {
+        return $.getUrlVars()[name];
+      }
+    });
+
+    // constants
+    var DEFAULT_BOARD_SIZE = 8;
+
+    // data model at global scope for easier debugging
+    var board;
+    var rules;
+    var cellWidth;
+    var flag = 0;
+
+    // initialize board
+    if ($.getUrlVar('size') && $.getUrlVar('size') >= 3 && $.getUrlVar('size') <= 20) {
+      board = new Board($.getUrlVar('size'));
+    } else {
+      board = new Board(DEFAULT_BOARD_SIZE);
+    }
+
+    // load a rule
+    rules = new Rules(board);
+
+    // Final initialization entry point: the Javascript code inside this block
+    // runs at the end of start-up when the page has finished loading.
+    $(document).ready(function() {
+      // Your code here.
+        flag = 1;
+        cellWidth = 320/board.boardSize;
+       // showTable();
+        rules.prepareNewGame();
+        //defaultButtons();
+        // var arrow = document.getElementById('arrowCanvas');
+        // var context = arrow.getContext('2d');
+        $('canvas').css('z-index', 0);
+        // $('body').click(function (ev){
+        //     context.clearRect(0,0,320,320);
+        //     $('canvas').css('z-index', 0);
+        // });
+        // if(arrow) {
+        //     arrow.addEventListener('click', function (ev) {
+        //         var bound = canvas.getBoundingClientRect();
+        //         var x = ev.clientX - bound.left - 10;
+        //         var y = ev.clientY - bound.top -10;
+        //         var cellHeight = canvas.height/board.boardSize;
+        //         var cellWidth = canvas.width/board.boardSize;
+        //         x = Math.floor(x/cellWidth);
+        //         y = Math.floor(y/cellHeight);
+        //         document.getElementById("moveToCell").value = board.getColumnName(x) + (y + 1).toString();
+        //         checkMove();
+        //     }, false);
+        // }
+        flag = 0;
+    });
+
+
+
+    /* Event Handlers */
+    // access the candy object with info.candy
+
+    // add a candy to the board
+    $(board).on('add', function(e, info)
+    {
+      // Your code here.
+      //  showTable();
+        var candy = info.candy;
+        var x = candy.col;
+        var y = candy.row;
+        var color = candy.color;
+        var id ="c"+candy.id;
+        var fr = info.fromRow;
+        //console.log(board.getImageFromColorName[color], id, x, y);
+        var img = "<img class=\"cell\" src=\"graphics/" + board.getImageFromColorName[color] + "\"" + "\" height=\"" + cellWidth + "\" id=\"" + id + "\">";
+        $('#candyImageBoard').append(img);
+        if(!info.fromRow && !info.fromCol) {
+            $("#"+id).css({
+                'width': cellWidth,
+                'top': 10+(y*cellWidth)+'px',
+                'left': 10+(x*cellWidth)+'px',
+                'position':'absolute',
+                'z-index': 20});
+        } else {
+            if(info.fromRow < -3){
+                fr = -3;
+            }
+            $("#" + id).css({
+                'width': cellWidth,
+                'top': (fr * cellWidth) + 'px',
+                'left': 10 + (info.fromCol * cellWidth) + 'px',
+                'position': 'absolute',
+                'z-index': 20
+            });
+            $("#" + id).animate({'top': 10 + (y * cellWidth) + 'px', 'left': 10 + (x * cellWidth) + 'px'}, 600, 'linear');
+
+        }
+        if(flag === 0) {
+            setTimeout(function () {
+                rules.removeCrushes(rules.getCandyCrushes());
+                defaultButtons();
+            }, 800);
+        }
+        else{
+            defaultButtons();
+        }
+    });
+
+    // move a candy on the board
+    $(board).on('move', function(e, info)
+    {
+      // Your code here.
+      //  showTable();
+      //  defaultButtons();
+        var candy = info.candy
+        var toX = candy.col;
+        var toY = candy.row;
+        var id = $("#c"+info.candy.id);
+        flag = 0;
+        var arrow = document.getElementById('arrowCanvas');
+        var context = arrow.getContext('2d');
+        context.clearRect(0,0,320,320);
+        $('canvas').css('z-index', 0);
+        id.animate({'top': 10+(toY*cellWidth)+'px', 'left': 10+(toX*cellWidth)+'px'}, 600, 'linear');
+        setTimeout(function () {
+            rules.removeCrushes(rules.getCandyCrushes());
+        },800);
+    });
+
+    // remove a candy from the board
+    $(board).on('remove', function(e, info)
+    {
+      // Your code here.
+      //  showTable();
+
+        var id = $("#c"+info.candy.id);
+        if (flag === 1)
+        id.remove();
+        else{
+            id.fadeOut(400, 'swing',function () {
+                document.getElementById("newGame").disabled = true;
+                document.getElementById("showMove").disabled = true;
+                id.remove();
+            })
+        }
+        setTimeout(function () {
+            rules.moveCandiesDown();
+        }, 300);
+        var arrow = document.getElementById('arrowCanvas');
+        var context = arrow.getContext('2d');
+        context.clearRect(0,0,320,320);
+        $('canvas').css('z-index', 0);
+    });
+
+    // move a candy on the board
+    $(board).on('scoreUpdate', function(e, info)
+    {
+        var scoreUpdated = info.score;
+        document.getElementById("scoreHere").innerHTML = scoreUpdated+" points";
+        if (info.score > 0) {
+            var color = info.candy.color;
+            document.getElementById("scoreHere").style.backgroundColor = color;
+            if (color === 'yellow') {
+                document.getElementById("scoreHere").style.color = 'black';
+            } else {
+                document.getElementById("scoreHere").style.color = 'white';
+            }
+        } else {
+            document.getElementById("scoreHere").innerHTML = "0 points";
+            document.getElementById("scoreHere").style.backgroundColor = 'white';
+            document.getElementById("scoreHere").style.color = 'black';
+        }
+    });
+
+    // Button Events
+    $(document).on('click', "#newGame", function(evt)
+    {
+      // Your code here.
+        var arrow = document.getElementById('arrowCanvas');
+        if(arrow) {
+            var context = arrow.getContext('2d');
+            context.clearRect(0, 0, 320, 320);
+            $('canvas').css('z-index', 0);
+        }
+        flag = 1;
+        while (!board.clear());
+      board.resetScore();
+      rules.prepareNewGame();
+      flag = 0;
+      //showTable();
+      //defaultButtons();
+    });
+
+    $(document).on('click', "#showMove", function(evt)
+    {
+        // Your code here.
+        // var canvas = document.getElementById("arrowCanvas");
+        var randomMove = rules.getRandomValidMove();
+        var candy = randomMove.candy;
+        var direction = randomMove.direction;
+        var x = candy.col;
+        var y = candy.row;
+        // var context = canvas.getContext('2d');
+        // context.beginPath();
+        // context.lineWidth = cellWidth/4;
+        // context.lineCap = "round";
+        drawArrow(direction,y,x);
+        // $('canvas').css('z-index', 30);
+        // switch (direction){
+        //     case 'up':{
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)-(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.25),(y*cellWidth)-(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)-(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.75),(y*cellWidth)-(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)-(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         break;
+        //     }
+        //     case 'down':{
+        //         y=y+1;
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.25),(y*cellWidth)+(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.75),(y*cellWidth)+(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)-(cellWidth*0.5));
+        //         break;
+        //     }
+        //     case 'left':{
+        //         context.moveTo((x*cellWidth)-(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)-(cellWidth*0.25),(y*cellWidth)+(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)-(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)-(cellWidth*0.25),(y*cellWidth)+(cellWidth*0.75));
+        //         context.moveTo((x*cellWidth)-(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         break;
+        //     }
+        //     case 'right':{
+        //         x=x+1;
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.25),(y*cellWidth)+(cellWidth*0.25));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)+(cellWidth*0.25),(y*cellWidth)+(cellWidth*0.75));
+        //         context.moveTo((x*cellWidth)+(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         context.lineTo((x*cellWidth)-(cellWidth*0.5),(y*cellWidth)+(cellWidth*0.5));
+        //         break;
+        //     }
+        //
+        // }
+        // context.strokeStyle = 'black';
+        // context.stroke();
+
+    });
+
+    function drawArrow(direction,row, col) {
+        var x=0;
+        var y=0;
+        var canvas = document.getElementById("arrowCanvas");
+        var context = canvas.getContext('2d');
+        context.clearRect(0,0,320,320);
+        $('canvas').css('z-index', 0);
+        context.beginPath();
+        $('canvas').css('z-index',30);
+        // canvas.top = 120 + (row * cellWidth) + 'px';
+        // canvas.left = 120 + (col * cellWidth) +'px';
+        canvas.height = cellWidth * 0.75;
+        canvas.width = cellWidth * 0.75;
+        switch (direction){
+            case 'up':{
+                $('canvas').css('top', 130 + (row * cellWidth) - (cellWidth * 0.375) + 'px');
+                $('canvas').css('left',  130 + (col * cellWidth) + (cellWidth * 0.175) +'px');
+                context.moveTo((cellWidth*0.375),cellWidth /10);
+                context.lineTo(cellWidth /10,cellWidth * 0.375);
+                context.moveTo((cellWidth*0.375),cellWidth /10);
+                context.lineTo(cellWidth * 0.75 - cellWidth /10,cellWidth * 0.375);
+                context.moveTo((cellWidth*0.375),cellWidth /10);
+                context.lineTo(cellWidth * 0.375,cellWidth * 0.75 - (cellWidth / 10));
+                break;
+            }
+            case 'down':{
+                $('canvas').css('top', 130 + (row * cellWidth) + (cellWidth * 0.625) + 'px');
+                $('canvas').css('left',  130 + (col * cellWidth) + (cellWidth * 0.175) +'px');
+                context.moveTo((cellWidth*0.375), cellWidth * 0.75 - (cellWidth /10));
+                context.lineTo(cellWidth/10 ,cellWidth * 0.375);
+                context.moveTo((cellWidth*0.375), cellWidth * 0.75 - (cellWidth /10));
+                context.lineTo(cellWidth * 0.75 - (cellWidth /10),cellWidth * 0.375);
+                context.moveTo((cellWidth*0.375), cellWidth * 0.75 - (cellWidth /10));
+                context.lineTo(cellWidth * 0.375, cellWidth / 10);
+                break;
+            }
+            case 'left':{
+                $('canvas').css('top', 130 + (row * cellWidth) + (cellWidth * 0.175) + 'px');
+                $('canvas').css('left',  130 + (col * cellWidth) - (cellWidth * 0.375) +'px');
+                context.moveTo((cellWidth /10),(cellWidth*0.375));
+                context.lineTo(cellWidth * 0.375, (cellWidth /10));
+                context.moveTo((cellWidth /10),(cellWidth*0.375));
+                context.lineTo((cellWidth*0.375),(cellWidth * 0.75) -(cellWidth /10));
+                context.moveTo((cellWidth /10),(cellWidth*0.375));
+                context.lineTo((cellWidth*0.75) - (cellWidth /10),(cellWidth*0.375));
+                break;
+            }
+            case 'right':{
+                $('canvas').css('top', 130 + (row * cellWidth) + (cellWidth * 0.175) + 'px');
+                $('canvas').css('left',  130 + (col * cellWidth) + (cellWidth * 0.625) +'px');
+                context.moveTo((cellWidth*0.75) - (cellWidth /10) ,(cellWidth*0.375));
+                context.lineTo((cellWidth*0.375), cellWidth / 10);
+                context.moveTo((cellWidth*0.75) - (cellWidth /10) ,(cellWidth*0.375));
+                context.lineTo((cellWidth*0.375), (cellWidth * 0.75) - cellWidth /10);
+                context.moveTo((cellWidth*0.75) - (cellWidth /10) ,(cellWidth*0.375));
+                context.lineTo(cellWidth / 10,(cellWidth*0.375));
+                break;
+            }
+        }
+        context.lineCap = "round";
+        context.strokeStyle = 'black';
+        context.lineWidth = cellWidth/5;
+        context.stroke();
+    }
+
+    // $(document).on('click', "#crushCandy", function(evt)
+    // {
+    //     while(rules.getCandyCrushes().length !== 0) {
+    //***            rules.removeCrushes(rules.getCandyCrushes());
+    //
+    //     //}
+    //
+    // });
+
+    // keyboard events arrive here
+    // $(document).on('keyup', function(evt) {
+    //     checkMove();
+    // });
+
+    var checkMove = function (id, fromRow, fromCol, toRow, toCol) {
+        var direction;
+        if(fromCol === toCol - 1 && toRow === fromRow){
+            direction = "right";
+        } else if (fromCol === toCol + 1 && toRow === fromRow){
+            direction = "left";
+        } else if (fromCol === toCol && toRow === fromRow + 1){
+            direction = "down";
+        } else if(fromCol === toCol && toRow === fromRow - 1){
+            direction = 'up';
+        } else {
+            direction = "none";
+        }
+
+        switch (direction){
+            case 'up':{
+                if (rules.isMoveTypeValid(board.getCandyAt(fromRow, fromCol), "up")) {
+                    board.flipCandies(board.getCandyAt(fromRow, fromCol), board.getCandyAt(toRow, toCol));
+                    break;
+                } else{
+                    $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+                    $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+                    break;
+                }
+            }
+            case 'down':{
+                if (rules.isMoveTypeValid(board.getCandyAt(fromRow, fromCol), "down")) {
+                    board.flipCandies(board.getCandyAt(fromRow, fromCol), board.getCandyAt(toRow, toCol));
+                    break;
+                }else{
+                    $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+                    $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+                    break;
+                }
+            }
+            case 'right':{
+                if (rules.isMoveTypeValid(board.getCandyAt(fromRow, fromCol), "right")) {
+                    board.flipCandies(board.getCandyAt(fromRow, fromCol), board.getCandyAt(toRow, toCol));
+                    break;
+                } else {
+                    $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+                    $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+                    break;
+                }
+            }
+            case 'left':{
+                if (rules.isMoveTypeValid(board.getCandyAt(fromRow, fromCol), "left")) {
+                    board.flipCandies(board.getCandyAt(fromRow, fromCol), board.getCandyAt(toRow, toCol));
+                    break;
+                }else{
+                    $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+                    $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+                    break;
+                }
+            }
+            case 'none':{
+                $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+                $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+                break;
+            }
+        }
+
+    }
+
+    var deltaX;
+    var deltaY;
+    var id;
+    var mouseFlag = 0;
+    var fromRow;
+    var fromCol;
+    var toRow;
+    var toCol;
+    var targetCell;
+
+    function moveAt(id, xread, yread) {
+        $('#'+id).css('top',yread - deltaY + 10 + 'px');
+        $('#'+id).css('left',xread - deltaX + 10 + 'px');
+
+    }
+
+    function mouseMove(e) {
+        if (mouseFlag === 1 && targetCell === 'cell') {
+            e.preventDefault();
+            var board1 = document.getElementById('candyImageBoard');
+            var bound = board1.getBoundingClientRect();
+            var xread = e.clientX - bound.left - 10;
+            var yread = e.clientY - bound.top - 10;
+            moveAt(id, xread, yread);
+        }
+    }
+
+    document.onmousemove = mouseMove;
+
+    function mouseClick(e) {
+        e.preventDefault();
+        // var arrow = document.getElementById('arrowCanvas');
+        // var context = arrow.getContext('2d');
+        // context.clearRect(0,0,320,320);
+        // $('canvas').css('z-index', 0);
+        if (e.target.className === 'cell') {
+            mouseFlag = 1;
+            // e.preventDefault();
+            var board1 = document.getElementById('candyImageBoard');
+            var bound = board1.getBoundingClientRect();
+            var xread = e.clientX - bound.left - 10;
+            var yread = e.clientY - bound.top - 10;
+            fromCol = Math.floor(xread / cellWidth);
+            fromRow = Math.floor(yread / cellWidth);
+            deltaY = yread - (fromRow * cellWidth);
+            deltaX = xread - (fromCol * cellWidth);
+            $('#'+id).css('z-index', 20);
+            id = e.target.id;
+            targetCell = e.target.className;
+            $('#'+id).css('z-index', 31);
+        }
+    }
+
+    document.onmousedown = mouseClick;
+
+    function mouseRelease(e) {
+        if(e.target.className === 'cell') {
+            e.preventDefault();
+            mouseFlag = 0;
+            var board1 = document.getElementById('candyImageBoard');
+            var bound = board1.getBoundingClientRect();
+            var xRead = (e.clientX - bound.left - 10).toString();
+            var yRead = (e.clientY - bound.top - 10).toString();
+            toCol = Math.floor(xRead / cellWidth);
+            toRow = Math.floor(yRead / cellWidth);
+            checkMove(id, fromRow, fromCol, toRow, toCol);
+        } else if(mouseFlag === 1){
+            mouseFlag = 0;
+            $('#'+id).css('top', fromRow * cellWidth + 10 + 'px');
+            $('#'+id).css('left', fromCol * cellWidth + 10 + 'px');
+        }
+    }
+
+    document.onmouseup = mouseRelease;
+
+    </script>
+
+
+    </head>
+
+    <body id="body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3" id="firstColumn" style="display: inline-block">
+          <div id="titleHead">
+          <!-- Column 1 Code Here -->
+              <!-- Column 1 Code Here -->
+              <h2 class="text-center text-danger" id="gameTitle">
+                  Candy Crush
+              </h2>
+              <div class="scoreBoard">
+                  <p id="scoreHere">0 points</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-lg btn-block button" id="newGame"> New Game </button>
+              <button type="button" class="btn btn-primary btn-lg btn-block button" id="showMove"> Show Move </button>
+
+          </div>
+      </div>
+
+        <div class="col-md-6" id="mainColumn" style="display: inline-block">
+
+          <!-- Column 2 Code Here -->
+         <!-- <table id="myTable"></table>  -->
+            <canvas id="arrowCanvas"></canvas>
+            <div id="candyImageBoard" style="height: 340px; width: 340px" ></div>
+            <!--<canvas id="canvas" height="320" width="320"></canvas>-->
+            <!--<canvas id="whiteBlock" height="110" width="320"></canvas>-->
+            <!--<div id="sample" style="height: 400px; width: 400px; position: relative"></div>-->
+        </div>
+
+        <!--<div class="col-md-3" id="lastColumn" style="position: relative; display: inline-block">-->
+            <!--&lt;!&ndash;<div id="x-read"></div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div id="y-read"></div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div id="x-click"></div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div id="y-click"></div>&ndash;&gt;-->
+
+          <!--&lt;!&ndash; Column 3 Code Here &ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+            <!--&lt;!&ndash;<form>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="form-inline" style="position: relative">&ndash;&gt;-->
+              <!--&lt;!&ndash;<label class="moveLable" for="moveToCell">Move:</label>&ndash;&gt;-->
+              <!--&lt;!&ndash;<input type="text" id="moveToCell" placeholder="nextCell" value="">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</form>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="directionButtons">&ndash;&gt;-->
+                <!--&lt;!&ndash;<table class="buttonsTable" style="position: relative; width: 50px; height: 50px;">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<button class = "btn buttons up" onclick="moveCandies('up')">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="glyphicon glyphicon-arrow-up"></span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<button class = "btn buttons left" onclick="moveCandies('left')">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="glyphicon glyphicon-arrow-left"></span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<button class = "btn buttons right" onclick="moveCandies('right')">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="glyphicon glyphicon-arrow-right"></span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<button class = "btn buttons down" onclick="moveCandies('down')">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="glyphicon glyphicon-arrow-down"></span>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<th></th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                <!--&lt;!&ndash;</table>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</div>-->
+      </div> <!-- class="row" -->
+    </div> <!-- class="container" -->
+    </body>
+    </html>

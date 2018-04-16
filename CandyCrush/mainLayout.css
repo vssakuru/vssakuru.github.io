@@ -1,0 +1,115 @@
+/* Copyright (c) 2017 MIT 6.813/6.831 course staff, all rights reserved.
+ * Redistribution of original or derived work requires permission of course staff.
+ */
+
+/* REMOVE ME - dashed lines and height for debugging */
+* {
+    padding: 10px;
+}
+
+.directionButtons{
+    padding-left: 10%;
+}
+
+
+
+#gameTitle{
+    color: blue;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+#mainColumn {
+    text-align: center;
+    padding: 10% 10% 10%;
+}
+
+.scoreBoard{
+    font-weight: normal;
+}
+
+.moveLable{
+    font-weight: bold;
+    font-size: medium;
+}
+
+table {
+    padding: 1px;
+    height: 320px;
+    width: 320px;
+}
+th, td{
+	border: 1px solid white;
+    padding: 1px;
+    color: #ffffff;
+}
+
+#firstColumn{
+  text-align: center;
+  padding-top: 10%;
+  font-size: 24px;
+}
+
+#lastColumn{
+    padding-top: 10%;
+    text-align: center;
+}
+
+#crushCandy{
+    font-weight: bold;
+}
+
+.buttons{
+    background-color: #71ffdb;
+    color: black;
+}
+
+#newGame, #showMove{
+    font-weight: bold;
+}
+
+#newGame:disabled, #showMove:disabled {
+    background-color: darkgray;
+    border-color: darkgray;
+    color: black;
+}
+
+/* Your css code here! */
+
+#titleHead{
+    padding: 0;
+}
+
+#candyImageBoard{
+    position: absolute;
+    left: 120px;
+    top: 120px;
+    overflow: hidden;
+}
+
+#canvas{
+    position: absolute;
+    left: 120px;
+    top: 120px;
+    z-index: 19;
+}
+
+#arrowCanvas{
+    position: absolute;
+    /*left: 120px;*/
+    /*top: 120px;*/
+    z-index: 0;
+    padding: 0;
+}
+
+.cell{
+    padding: 0;
+}
+
+#whiteBlock{
+    position: absolute;
+    left: 120px;
+    top: 0;
+    z-index: 22;
+    background-color: white;
+}
