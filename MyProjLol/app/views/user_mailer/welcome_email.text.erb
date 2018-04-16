@@ -1,0 +1,10 @@
+Welcome to WMFD, <%= @user.name %>
+===============================================
+
+You have successfully signed up to WMFD,
+your username is: <%= @user.name %>.
+
+To login to the site, just follow this link: <%= @url %>.
+<%=	 confirm_email_user_url(@user.confirm_token) %>
+
+Thanks for joining and have a great day!
